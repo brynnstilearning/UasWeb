@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: May 19, 2025 at 04:35 AM
+-- Generation Time: May 29, 2025 at 08:00 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -24,124 +24,134 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `hewan_qurban`
+-- Table structure for table `keuangan`
 --
 
-CREATE TABLE `hewan_qurban` (
-  `id` int NOT NULL,
-  `jenis` enum('kambing','sapi') NOT NULL,
+CREATE TABLE `keuangan` (
+  `id_keuangan` int NOT NULL,
+  `id_peserta` int DEFAULT NULL,
+  `jenis` enum('pemasukan','pengeluaran') NOT NULL,
+  `id_perlengkapan` int DEFAULT NULL,
+  `keterangan` text,
   `jumlah` int NOT NULL,
-  `harga_per_ekor` int NOT NULL,
-  `biaya_admin` int NOT NULL,
-  `total_harga` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `pengeluaran`
---
-
-CREATE TABLE `pengeluaran` (
-  `id` int NOT NULL,
-  `tanggal` date DEFAULT NULL,
-  `jenis_pengeluaran` varchar(100) DEFAULT NULL,
-  `jumlah` int DEFAULT NULL,
-  `keterangan` text
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `rekap_keuangan`
---
-
-CREATE TABLE `rekap_keuangan` (
-  `id` int NOT NULL,
-  `jenis` enum('masuk','keluar') NOT NULL,
-  `jumlah` int NOT NULL,
-  `sumber_or_keterangan` text,
   `tanggal` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users`
+-- Table structure for table `perlengkapan`
 --
 
-CREATE TABLE `users` (
-  `id` int NOT NULL,
-  `username` varchar(50) DEFAULT NULL,
-  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `level` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL
+CREATE TABLE `perlengkapan` (
+  `id_perlengkapan` int NOT NULL,
+  `nama_perlengkapan` varchar(50) DEFAULT NULL,
+  `harga` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+-- --------------------------------------------------------
+
 --
--- Dumping data for table `users`
+-- Table structure for table `peserta`
 --
 
-INSERT INTO `users` (`id`, `username`, `password`, `level`) VALUES
-(1, 'admin', '0192023a7bbd73250516f069df18b500', 'admin'),
-(2, 'warga', '8bee83f98002668cb8f55ba3ba2a6d3b', 'warga'),
-(3, 'panitia', '913caf40bf0473d4f0f7a527cd44dea9', 'panitia'),
-(4, 'berqurban', '90f5d7cd1b463b6252756a30a3733084', 'berqurban');
+CREATE TABLE `peserta` (
+  `id_peserta` int NOT NULL,
+  `nik` char(16) DEFAULT NULL,
+  `level` enum('warga','panitia','berqurban') NOT NULL,
+  `jumlah_daging_kg` float DEFAULT '0',
+  `status_ambil` enum('belum','sudah') DEFAULT 'belum',
+  `qr_filename` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `warga`
+--
+
+CREATE TABLE `warga` (
+  `nik` char(16) NOT NULL,
+  `nama` varchar(50) DEFAULT NULL,
+  `tempat_lahir` varchar(50) DEFAULT NULL,
+  `tanggal_lahir` date DEFAULT NULL,
+  `jenis_kelamin` enum('L','P') DEFAULT NULL,
+  `alamat` text,
+  `agama` varchar(20) DEFAULT NULL,
+  `status_perkawinan` varchar(20) DEFAULT NULL,
+  `pekerjaan` varchar(50) DEFAULT NULL,
+  `kewarganegaraan` varchar(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `hewan_qurban`
+-- Indexes for table `keuangan`
 --
-ALTER TABLE `hewan_qurban`
-  ADD PRIMARY KEY (`id`);
+ALTER TABLE `keuangan`
+  ADD PRIMARY KEY (`id_keuangan`),
+  ADD KEY `id_peserta` (`id_peserta`),
+  ADD KEY `id_perlengkapan` (`id_perlengkapan`);
 
 --
--- Indexes for table `pengeluaran`
+-- Indexes for table `perlengkapan`
 --
-ALTER TABLE `pengeluaran`
-  ADD PRIMARY KEY (`id`);
+ALTER TABLE `perlengkapan`
+  ADD PRIMARY KEY (`id_perlengkapan`);
 
 --
--- Indexes for table `rekap_keuangan`
+-- Indexes for table `peserta`
 --
-ALTER TABLE `rekap_keuangan`
-  ADD PRIMARY KEY (`id`);
+ALTER TABLE `peserta`
+  ADD PRIMARY KEY (`id_peserta`),
+  ADD KEY `nik` (`nik`);
 
 --
--- Indexes for table `users`
+-- Indexes for table `warga`
 --
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`);
+ALTER TABLE `warga`
+  ADD PRIMARY KEY (`nik`);
 
 --
 -- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT for table `hewan_qurban`
+-- AUTO_INCREMENT for table `keuangan`
 --
-ALTER TABLE `hewan_qurban`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+ALTER TABLE `keuangan`
+  MODIFY `id_keuangan` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `pengeluaran`
+-- AUTO_INCREMENT for table `perlengkapan`
 --
-ALTER TABLE `pengeluaran`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+ALTER TABLE `perlengkapan`
+  MODIFY `id_perlengkapan` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `rekap_keuangan`
+-- AUTO_INCREMENT for table `peserta`
 --
-ALTER TABLE `rekap_keuangan`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+ALTER TABLE `peserta`
+  MODIFY `id_peserta` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `users`
+-- Constraints for dumped tables
 --
-ALTER TABLE `users`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- Constraints for table `keuangan`
+--
+ALTER TABLE `keuangan`
+  ADD CONSTRAINT `keuangan_ibfk_1` FOREIGN KEY (`id_peserta`) REFERENCES `peserta` (`id_peserta`),
+  ADD CONSTRAINT `keuangan_ibfk_2` FOREIGN KEY (`id_perlengkapan`) REFERENCES `perlengkapan` (`id_perlengkapan`);
+
+--
+-- Constraints for table `peserta`
+--
+ALTER TABLE `peserta`
+  ADD CONSTRAINT `peserta_ibfk_1` FOREIGN KEY (`nik`) REFERENCES `warga` (`nik`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
