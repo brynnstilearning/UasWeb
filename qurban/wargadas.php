@@ -1,9 +1,5 @@
 <?php
 session_start();
-if (!isset($_SESSION['username']) || $_SESSION['level'] !== 'warga') {
-    header("Location: login.php");
-    exit;
-}
 ?>
 
 <!DOCTYPE html>

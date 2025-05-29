@@ -1,9 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION['username']) || $_SESSION['level'] !== 'admin') {
-    header("Location: login.php");
-    exit;
-}
+
 ?>
 
 <!DOCTYPE html>
@@ -88,7 +85,7 @@ if (!isset($_SESSION['username']) || $_SESSION['level'] !== 'admin') {
                 <span class="nav-link text-white">Halo, <?= $_SESSION['username']; ?></span>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-danger" href="login.php">Logout</a>
+                <a class="nav-link text-danger" href="formlogin.html">Logout</a>
             </li>
         </ul>
     </div>
